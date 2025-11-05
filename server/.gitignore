@@ -1,0 +1,15 @@
+# Ignore all node_modules folders in any sub-directory
+**/node_modules
+
+# Ignore all .env files and their variations
+.env
+.env.*
+
+# Ignore build output from Vite (your client)
+**/dist
+
+# Ignore OS-specific files
+.DS_Store
+
+# Ignore npm logs
+npm-debug.log*
