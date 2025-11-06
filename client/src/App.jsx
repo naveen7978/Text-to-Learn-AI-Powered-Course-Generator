@@ -1,24 +1,28 @@
-import { Box, Heading } from '@chakra-ui/react';
-import { Routes, Route } from 'react-router-dom';
+import { Box, Heading, Flex, Spacer } from "@chakra-ui/react";
+import { Routes, Route } from "react-router-dom";
+import LoginButton from "./components/LoginButton";
+import LogoutButton from "./components/LogoutButton";
+import Profile from "./components/Profile";
+import FetchCourses from "./pages/FetchCourses";
+import TokenTester from "./pages/TokenTester";
 
 function App() {
   return (
-    <Box>
-      {/* We'll add a sidebar and topbar here later, as per Milestone 7 & 149 */}
-      <Heading p="4">Text-to-Learn Frontend</Heading>
+    <Box p="4">
+      <Flex mb="4" align="center">
+        <Heading size="md">Text-to-Learn</Heading>
+        <Spacer />
+        <Profile />
+        <LoginButton />
+        <LogoutButton />
+      </Flex>
 
-      {/* This is where your pages will be rendered */}
       <Routes>
-        <Route path="/" element={<HomePage />} />
-        {/* We'll add more routes like /course/:id later */}
+         <Route path="/" element={<TokenTester />} /> 
+        {/* <Route path="/" element={<FetchCourses />} /> */}
       </Routes>
     </Box>
   );
 }
-
-// A simple placeholder component for now
-const HomePage = () => {
-  return <Box p="4">Welcome to the Home Page!</Box>;
-};
 
 export default App;
