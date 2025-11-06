@@ -5,6 +5,7 @@ import LogoutButton from "./components/LogoutButton";
 import Profile from "./components/Profile";
 import FetchCourses from "./pages/FetchCourses";
 import TokenTester from "./pages/TokenTester";
+import TestDBPage from "./pages/TestDBPage";
 
 function App() {
   return (
@@ -18,7 +19,8 @@ function App() {
       </Flex>
 
       <Routes>
-         <Route path="/" element={<TokenTester />} /> 
+         {/* <Route path="/" element={<TokenTester />} />  */}
+         <Route path="/" element={<TestDBPage />} />
         {/* <Route path="/" element={<FetchCourses />} /> */}
       </Routes>
     </Box>
