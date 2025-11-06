@@ -6,7 +6,7 @@ import Profile from "./components/Profile";
 import FetchCourses from "./pages/FetchCourses";
 import TokenTester from "./pages/TokenTester";
 import TestDBPage from "./pages/TestDBPage";
-
+import LessonTestPage from "./pages/LessonTestPage";
 function App() {
   return (
     <Box p="4">
@@ -21,6 +21,7 @@ function App() {
       <Routes>
          {/* <Route path="/" element={<TokenTester />} />  */}
          <Route path="/" element={<TestDBPage />} />
+         <Route path="/lesson/test" element={<LessonTestPage />} />
         {/* <Route path="/" element={<FetchCourses />} /> */}
       </Routes>
     </Box>
