@@ -24,6 +24,8 @@ import { connectDB } from "./config/db.js"; // MongoDB connection
 import courseRoutes from "./routes/course.js"; // Secure routes
 import testRoutes from "./routes/testdb.js";   // Test routes
 import aiRoutes from "./routes/aiRoutes.js"; // AI routes
+import youtubeRoute from "./routes/youtubeRoute.js"; //youtube route
+
 // --------------------
 //  Initialize app
 // --------------------
@@ -60,7 +62,7 @@ console.log("🔑 GEMINI API Key Loaded:", !!process.env.GEMINI_API_KEY);
 app.use("/api/courses", courseRoutes); // Auth-protected endpoints
 app.use("/api/testdb", testRoutes);   // Auth-protected endpoints
 app.use("/api/ai",aiRoutes);
-
+app.use("/api/youtube", youtubeRoute); 
 // Root endpoint
 app.get("/", (req, res) => {
   res.send("Hello  from the Text-to-Learn Backend (MERN + Auth0 + MongoDB)");
