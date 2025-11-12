@@ -1,55 +1,113 @@
-import { VStack, Box, Text, Icon, Flex } from "@chakra-ui/react";
-import { NavLink } from "react-router-dom";
-import { Home, BookOpen, Layers } from "lucide-react";
-
-const links = [
-  { to: "/", label: "Home", icon: Home },
-  { to: "/courses/1", label: "Courses", icon: BookOpen },
-  { to: "/lesson/test", label: "Lessons", icon: Layers },
-];
+// client/src/components/layout/Sidebar.jsx
+import {
+  Box,
+  Flex,
+  IconButton,
+  VStack,
+  Text,
+  Button,
+} from "@chakra-ui/react";
+import { ChevronLeft, ChevronRight, BookOpen } from "lucide-react";
+import { useEffect, useState } from "react";
+import { fetchUserCourses } from "../../utils/aiApi";
+import { useAuth0 } from "@auth0/auth0-react";
+import { useNavigate } from "react-router-dom";
 
 export default function Sidebar() {
-  return (
-    <Box
-      w="240px"
-      bg="white"
-      borderRight="1px solid"
-      borderColor="gray.200"
-      p={5}
-      boxShadow="sm"
-    >
-      <Text
-        fontWeight="bold"
-        fontSize="xl"
-        mb={6}
-        textAlign="center"
-        bgGradient="linear(to-r, blue.500, teal.400)"
-        bgClip="text"
-      >
-        Text-to-Learn
-      </Text>
+  const [isOpen, setIsOpen] = useState(() => {
+    // Load the sidebar state from localStorage on mount
+    const saved = localStorage.getItem("sidebarOpen");
+    return saved ? JSON.parse(saved) : false; // default closed
+  });
+  const [courses, setCourses] = useState([]);
+  const { user } = useAuth0();
+  const navigate = useNavigate();
 
-      <VStack align="stretch" spacing={2}>
-        {links.map(({ to, label, icon }) => (
-          <NavLink key={to} to={to}>
-            {({ isActive }) => (
-              <Flex
-                align="center"
-                p={2.5}
-                borderRadius="md"
-                bg={isActive ? "blue.50" : "transparent"}
-                color={isActive ? "blue.600" : "gray.600"}
-                fontWeight={isActive ? "semibold" : "medium"}
-                _hover={{ bg: "blue.50", color: "blue.600" }}
-                transition="all 0.2s"
+  const loadCourses = async () => {
+    if (!user?.sub) return;
+    try {
+      const res = await fetchUserCourses(user.sub);
+      setCourses(res);
+    } catch (err) {
+      console.error("Error fetching courses:", err);
+    }
+  };
+
+  useEffect(() => {
+    loadCourses();
+
+    // Refresh when new course created
+    window.addEventListener("courseUpdated", loadCourses);
+    return () => window.removeEventListener("courseUpdated", loadCourses);
+  }, [user]);
+
+  // Save sidebar open/close state to localStorage
+  useEffect(() => {
+    localStorage.setItem("sidebarOpen", JSON.stringify(isOpen));
+  }, [isOpen]);
+
+  return (
+    <>
+      {/* Sidebar */}
+      <Box
+        as="nav"
+        position="relative"
+        h="100vh"
+        transition="all 0.3s ease"
+        bgGradient="linear(to-b, gray.900, gray.800)"
+        borderRight="1px solid rgba(255,255,255,0.1)"
+        overflowY="auto"
+        w={isOpen ? "250px" : "0px"}
+        opacity={isOpen ? 1 : 0}
+        pointerEvents={isOpen ? "auto" : "none"}
+        zIndex="20"
+      >
+        <Flex direction="column" h="full" p={4} color="white">
+          <Text
+            fontSize="lg"
+            fontWeight="bold"
+            mb={4}
+            color="teal.200"
+            letterSpacing="wide"
+          >
+            Your Courses
+          </Text>
+
+          <VStack align="start" spacing={2}>
+            {courses.map((course) => (
+              <Button
+                key={course._id}
+                variant="ghost"
+                justifyContent="flex-start"
+                w="full"
+                colorScheme="teal"
+                _hover={{ bg: "whiteAlpha.200" }}
+                onClick={() => navigate(`/courses/${course._id}`)}
               >
-                <Icon as={icon} mr={3} />
-                {label}
-              </Flex>
-            )}
-          </NavLink>
-        ))}
-      </VStack>
-    </Box>
+                <BookOpen size={16} style={{ marginRight: "8px" }} />
+                <Text isTruncated>{course.title}</Text>
+              </Button>
+            ))}
+          </VStack>
+        </Flex>
+      </Box>
+
+      {/* Toggle Button */}
+      <IconButton
+        aria-label="Toggle Sidebar"
+        icon={isOpen ? <ChevronLeft /> : <ChevronRight />}
+        position="absolute"
+        top="50%"
+        left={isOpen ? "250px" : "0"}
+        transform="translateY(-50%)"
+        colorScheme="blue"
+        variant="solid"
+        borderRadius="full"
+        size="sm"
+        onClick={() => setIsOpen(!isOpen)}
+        zIndex="30"
+        transition="all 0.3s ease"
+      />
+    </>
   );
 }

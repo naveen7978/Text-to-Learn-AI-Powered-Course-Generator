@@ -20,7 +20,7 @@ router.get("/me", checkJwt, async (req, res) => {
   try {
     const user = req.auth; // Comes from verified JWT
     res.json({
-      message: "Token verified successfully ✅",
+      message: "Token verified successfully ",
       user,
     });
   } catch (err) {

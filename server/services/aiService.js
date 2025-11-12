@@ -73,7 +73,7 @@ export async function generateCoursePrompt(topic) {
     const json = JSON.parse(result.response.text());
     return json;
   } catch (err) {
-    console.error("❌ Gemini structured output error:", err);
+    console.error(" Gemini structured output error:", err);
     throw new Error("Failed to generate structured course JSON");
   }
 }
@@ -112,7 +112,7 @@ export async function generateLessonPrompt(course, module, lesson) {
     const json = JSON.parse(result.response.text());
     return json;
   } catch (err) {
-    console.error("❌ Gemini lesson generation error:", err);
+    console.error(" Gemini lesson generation error:", err);
     throw new Error("Failed to generate structured lesson JSON");
   }
 }

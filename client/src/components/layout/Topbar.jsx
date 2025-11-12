@@ -1,45 +1,59 @@
-import { Flex, Text, Avatar, Button } from "@chakra-ui/react";
+// client/src/components/layout/Topbar.jsx
+import { Flex, Text, Button, HStack, Avatar, Box, useBreakpointValue } from "@chakra-ui/react";
 import { useAuth0 } from "@auth0/auth0-react";
 
 export default function Topbar() {
-  const { loginWithRedirect, logout, isAuthenticated, user } = useAuth0();
-
-  if (!isAuthenticated) return null; // 👈 hide Topbar when not logged in
+  const { user, logout } = useAuth0();
+  const showAvatar = useBreakpointValue({ base: false, md: true });
 
   return (
     <Flex
       align="center"
       justify="space-between"
-      bg="white"
-      px={6}
-      py={3}
-      borderBottom="1px solid"
-      borderColor="gray.200"
-      boxShadow="sm"
+      bgGradient="linear(to-r, gray.900, gray.800)"
+      color="white"
+      px={{ base: 4, md: 8 }}
+      py={4}
+      borderBottom="1px solid rgba(255,255,255,0.1)"
+      shadow="md"
       position="sticky"
       top="0"
       zIndex="10"
     >
-      <Text fontSize="lg" fontWeight="bold" color="gray.700">
-        Learning Dashboard
+      {/* Left Spacer for Centering Balance */}
+      <Box w={{ base: "40px", md: "100px" }} />
+
+      {/* Centered Title */}
+      <Text
+        fontSize={{ base: "xl", md: "2xl" }}
+        fontWeight="bold"
+        bgGradient="linear(to-r, cyan.400, blue.300)"
+        bgClip="text"
+        textAlign="center"
+        flex="1"
+      >
+        Text-to-Learn
       </Text>
 
-      <Flex align="center" gap={3}>
-        <Avatar name={user?.name} src={user?.picture} size="sm" />
-        <Text>{user?.given_name || user?.name}</Text>
+      {/* Right Section - Avatar + Logout */}
+      <HStack spacing={4} justify="flex-end" w={{ base: "auto", md: "150px" }}>
+        {showAvatar && (
+          <HStack spacing={2}>
+            <Avatar size="sm" name={user?.name} src={user?.picture} />
+            <Text fontSize="sm" fontWeight="medium" color="teal.200">
+              {user?.name?.split(" ")[0] || "User"}
+            </Text>
+          </HStack>
+        )}
         <Button
-          size="sm"
           colorScheme="red"
+          size="sm"
           variant="solid"
-          onClick={() =>
-            logout({
-              logoutParams: { returnTo: window.location.origin },
-            })
-          }
+          onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })}
         >
           Logout
         </Button>
-      </Flex>
+      </HStack>
     </Flex>
   );
 }

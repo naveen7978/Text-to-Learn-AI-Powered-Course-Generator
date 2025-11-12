@@ -1,3 +1,4 @@
+// client/src/AppRouter.jsx
 import React from "react";
 import {
   createBrowserRouter,
@@ -5,11 +6,13 @@ import {
   Navigate,
 } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
+
+// Layouts & Pages
 import AppLayout from "./components/layout/AppLayout";
 import Home from "./pages/Home";
 import CourseView from "./pages/CourseView";
 import LessonView from "./pages/LessonView";
-import LessonTestPage from "./pages/LessonTestPage";
+
 import LoginPage from "./pages/LoginPage";
 import NotFound from "./pages/NotFound";
 import LoadingScreen from "./pages/LoadingScreen";
@@ -22,7 +25,7 @@ function ProtectedRoute({ children }) {
 function AppRoutes() {
   const { isLoading } = useAuth0();
 
-  // ✅ Nothing renders until Auth0 fully initialized
+  // Wait for Auth0 to initialize
   if (isLoading) {
     return <LoadingScreen />;
   }
@@ -37,13 +40,20 @@ function AppRoutes() {
         </ProtectedRoute>
       ),
       children: [
+        // Home - Generate courses
         { index: true, element: <Home /> },
+
+        // Course details (view modules)
         { path: "courses/:courseId", element: <CourseView /> },
+
         {
-          path: "courses/:courseId/module/:moduleIndex/lesson/:lessonIndex",
+          path: "courses/:courseId/lesson/:lessonId",
           element: <LessonView />,
         },
-        { path: "lesson/test", element: <LessonTestPage /> },
+
+        //  Testing routes
+
+        //  Fallback
         { path: "*", element: <NotFound /> },
       ],
     },

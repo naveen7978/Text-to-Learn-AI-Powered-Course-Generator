@@ -43,10 +43,10 @@ export default function LoginPage() {
             boxSize="80px"
           />
           <Heading size="lg" color="blue.600">
-            Welcome to Text-to-Learn
+             Text-to-Learn
           </Heading>
           <Text fontSize="md" color="gray.600">
-            Sign in to generate and explore AI-powered courses instantly.
+           generate and explore AI-powered courses .
           </Text>
           <Button
             colorScheme="blue"
